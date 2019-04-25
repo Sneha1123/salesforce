@@ -1,0 +1,58 @@
+trigger ContactTriggerItc on Contact (before insert,before update,before delete) {
+    if (trigger.isbefore){
+        if(Trigger.isInsert){
+        system.debug('my trigger.new values'+' '+Trigger.new);
+        system.debug('my trigger.old values'+' '+Trigger.old);
+            for(Contact cc:trigger.new){
+                if(cc.lastName=='ram'){
+                    cc.addError('ram cannot be the lastName');
+                }
+            }
+    
+    }
+     if(Trigger.isUpdate){
+        system.debug('my trigger.new values'+' '+Trigger.new);
+        system.debug('my trigger.old values'+' '+Trigger.old);
+         for(contact cn:trigger.new){
+             if(trigger.oldmap.get(cn.id).lastName=='itcinfo' && cn.LastName=='capegemini'){
+                 cn.addError('name cannot be changed from itcinfo to capegemini');
+             }
+         }
+         //for(contact cc:trigger.old){
+           //  if(cc.LastName=='itcinfo'){
+             //    cc.addError('name cannot be changed from itcinfo');
+            // }
+         //}
+    
+    }
+        if(Trigger.isDelete){
+        system.debug('my trigger.new values'+' '+Trigger.new);
+        system.debug('my trigger.old values'+' '+Trigger.old);
+            for(contact cc:trigger.old){
+                if(cc.lastName=='cape'){
+                    cc.addError('cannot be deleted');
+                }
+            } 
+    
+    }
+        
+    }
+      /*if(trigger.isafter){
+        if(trigger.isinsert){
+            
+            //case cs=new case();
+           // Id recid =[select id from recordtype where name='Enquiry'].Id;
+                for (contact c:trigger.new){
+                    system.debug(c.Id);
+                   /* cs.contactId=c.id;
+                    cs.Product__c='GC1040';
+                    cs.Type='other';
+                    cs.RecordTypeId='Enquiry';
+                    cs.status='New Enquiry';
+                    cs.Origin='Phone';
+                    insert cs;*/
+                }
+        }
+        
+    }*/
+}
