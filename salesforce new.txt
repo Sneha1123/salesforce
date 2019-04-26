@@ -65,7 +65,7 @@ system.debug(cont.id);
 ======================================
 
 public with sharing class ContactCreator {
-    public Static void insertrecords(string,Name1){
+    public Static void insertrecords(string Name1){
       try{
 Contact cont = new Contact();
 //cont.LastName = 'Kohli';
