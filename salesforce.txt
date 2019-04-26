@@ -1,471 +1,363 @@
-//ContactItcCreater cc=new ContactItcCreater();
-//cc.insertRecords();
-/*ContactItcCreater.insertRecords('Ravi');
-list<Contact> conlist =new list<Contact>();
-conlist=[select id from contact where LastName like '%Dhawan%'];
-delete conlist;*/
-//ContactItcCreater.deleteRecords('0030o00002fnyL2AAI');
-//ContactItcCreater.updateRecords('0030o00002fnyKnAAI','Sociology');
- /*try{
-     
-     String Name1='harbhajan';
-           
-            //con.LastName='Dhawan';
-     for(integer i=0;i<300;i++){
-          Contact con=new Contact();
-            con.LastName=Name1;
-            con.Confirmed__c=false;
-            insert con;
-            system.debug(con.id);
-        }
-     }
-        catch(exception e){
-            system.debug(e.getMessage());
-        }
-*//*
-String Name1='Dhawan';
-list<Contact> conlist=new list<Contact>();
-for(integer i=0;i<199;i++)
-{
-    Contact con=new Contact();
-    con.LastName=Name1;
-    con.Confirmed__c=false;
-    conlist.add(con);
-    
+Integer serialnumber = 0;
+serialnumber++;
+string name='Manas';
+system.debug('Hello World'+serialnumber+' '+name);
+Set<String> strset1 = new set<STring>();
+strset1.add('Rose');
+strset1.add('Lily');
+strset1.add('jasmine');
+system.debug('data from set'+strset1);
+List<String> Strlist = new List<string>();
+strlist.add('Rose');
+strlist.add('Lily');
+strlist.add('jasmine');
+system.debug('data from list'+strlist.size());
+for (String x:strlist){
+    system.debug('inside for'+' '+x);
 }
-insert conlist;
-*/
-//list<Contact> condelete= new list<Contact>();
-//Contact cont=new Contact();
-//condelete=[select id from contact where LastName like'%Dhawan%'];           
-//delete condelete;
 
+Map<Integer,String> mapvals1 = new Map<Integer,String>();
+    
+    mapvals1.put(1,'Bangalore');
+    mapvals1.put(2,'Pune');
+    mapvals1.put(3,'Bhubaneswar');
+    mapvals1.put(4,'Mumbai');
+system.debug(mapvals1.get(2));
 
- list<Contact> conlist=new list<Contact>();
+For(Integer m:mapvals1.keyset()){
+    system.debug(m);//This will give you the key
+    system.debug(mapvals1.get(m));//This will give you the value for key
+}
+
+===========================================
+
+String z='certified developer 1';
+system.debug(z);
+list<account> aclist= new list<account>();
+aclist= [Select id,name,type from account where type in 'Prospect'];
+system.debug(aclist);
+For(account ac:aclist){
+    system.debug(ac.name+'::'+ac.type);
+}
+
+=========================================
+
+String z='certified developer 1';
+system.debug(z);
+list<contact> aclist= new list<contact>();
+aclist= [Select Name,Title from contact ];
+system.debug(aclist);
+For(contact ac:aclist){
+    system.debug(ac.Name+'::'+ac.Title);
+}
+
+==========================================
 
 try{
-     Contact con=new Contact(Age__c=34,LastName='raju');
-            conlist.add(con);
-       con=new Contact(Age__c=4,LastName='raju1');
-            conlist.add(con);
-       con=new Contact(Age__c=56,LastName='ra');
-            conlist.add(con);
-    //insert (conlist);
-    Database.SaveResult[] sr=database.insert(conlist,false);
-    for(database.SaveResult s:sr){
-        if(s.isSuccess()){
-            system.debug(s.getId());
+Contact cont = new Contact();
+//cont.LastName = 'Kohli';
+insert cont;
+system.debug(cont.id);
+}catch(exception e){
+    system.debug(e.getMessage());
+}
+
+======================================
+
+public with sharing class ContactCreator {
+    public Static void insertrecords(string,Name1){
+      try{
+Contact cont = new Contact();
+//cont.LastName = 'Kohli';
+cont.LastName = Name1;
+insert cont;
+system.debug(cont.id);
+}catch(exception e){
+    system.debug(e.getMessage());
+}
+  
+    }
+
+}
+
+Debug
+ContactCreator1.insrecords('Dhoni');
+==============================================
+Public with sharing class ContactCreater {
+    public static void insertrecords(String Name1){
+        try{
+            Contact cont = new Contact();
+            cont.LastName = 'Kholi';
+            cont.LastName = Name1;
+            //cont.Languages__c = 'Hindi';
+            insert cont;
+            system.debug(cont.id);
+        }catch(exception e){
+            system.debug(e.getMessage());
+        }  
+    }
+    
+    Public static void deleterecord(String recid){
+        try{
+            Contact contdel = new Contact();
+            contdel = [select id from contact where id=:recid];
+            delete contdel;
+        }catch(exception e){
+            system.debug(e.getMessage());
         }
-        for(database.Error err:s.getErrors())
+    }
+}
+
+==========================================
+
+ public static void updaterecords(String recid,String passeddate){
+    try{
+        contact conttoupdate = new contact();
+        conttoupdate= [select id,department from contact where id=:recid];
+        conttoupdate.department = passeddate;
+        update conttoupdate;
+        }catch(exception e){
+            system.debug(e.getMessage());
+        }
+    }
+}
+
+===============================================
+try{
+    List<contact> contactlist = new list<contact>();
+    Contact cont;
+String Name1='harbajan';
+    for(integer x=0;x<199;x++){
+        cont = new Contact();
+        cont.LastName = Name1 + X;
+        contactlist.add(cont);
+        //insert cont;
+        //system.debug(cont.id);
+        
+    }
+    insert contactlist;
+    }catch(exception e){
+            system.debug(e.getMessage());
+        }
+
+==========================================
+List<Contact> contlst = new List<Contact>();
+contlst = [select id from contact where Name like '%harbajan%'];
+delete contlst;
+
+============================================
+
+List<Contact> c = new List<Contact>();
+try{
+    contact cont;
+    cont = new Contact(Age__c=34,LastName='raju1');
+    c.add(cont);
+    cont = new Contact(Age__c=9,LastName='raju1');
+    c.add(cont);
+    cont = new Contact(Age__c=34,LastName='ra');
+    c.add(cont);
+    insert(c);
+    
+    
+}catch(exception e){
+            system.debug(e.getMessage());
+        }
+
+==================================================
+List<Contact> c = new List<Contact>();
+try{
+    contact cont;
+    cont = new Contact(Age__c=34,LastName='raju1');
+    c.add(cont);
+    cont = new Contact(Age__c=9,LastName='raju1');
+    c.add(cont);
+    cont = new Contact(Age__c=34,LastName='ra');
+    c.add(cont);
+    //insert(c);
+    Database.SaveResult[] sr = Database.insert(c,false);
+    For(Database.SaveResult s:sr){
+        if(s.isSuccess()){
+            System.debug(s.getId());
+        }for(Database.error err:s.getErrors())
+        {
+            system.debug(err.getMessage());
+        }
+    }   
+}catch(exception e){
+            system.debug(e.getMessage());
+        }
+
+=============================================
+
+Contact c = new Contact();
+//SavePoint sp = Database.setSavepoint();
+   c = [select id,lastname from contact where id ='0030o00002fhPO2'];
+   c.lastname = 'Ravi1';
+   update c;
+   //Database.rollback(sp);
+
+==========================Exception
+Contact c = new Contact();
+try{
+    c =[select id from contact limit 1];
+    system.debug(c.Lastname);
+
+===========================
+List<Contact> c = new List<Contact>();
+Contact d = new Contact();
+try{
+    //insert c;
+    Database.SaveResult[] sr = Database.insert(d,false);
+    For(Database.SaveResult s:sr){
+        if(s.isSuccess()){
+            System.debug(s.getId());
+        }for(Database.error err:s.getErrors())
         {
             system.debug(err.getMessage());
         }
     }
-        }
-     
-        catch(exception e){
-            system.debug(e.getMessage());
-        }
-
-
----------------------------------------------------------------------------------------------------------------
-Exception
-
-contact c=new contact();
-try{
-//c=[select id,name from contact limit 1];
-//system.debug(c.lastName);
-    update c;
+    //insert c;
+    //c =[select type from account];
+    d = [select id from contact limit 1];
+    system.debug(d.Lastname);
+    }catch(exception e){
+    system.debug(e.getMessage());
 }
-catch(exception e){
-    system.debug(e.getMessage()+' '+e.getTypeName());
+    }catch(exception e){
+    system.debug(e.getMessage());
 }
 
-----------------------------------------------------------------------------------------------------------------
-
-Triggers
-
-trigger ContactTriggerItc on Contact (before insert,before update,before delete) {
-    if (trigger.isbefore){
+==========================================Contact Trigger
+trigger ContactTriggerITC on Contact (before insert,before update,before delete,after insert,after update,after delete) {
+    
+    if(Trigger.isBefore){
         if(Trigger.isInsert){
-        system.debug('my trigger.new values'+' '+Trigger.new);
-        system.debug('my trigger.old values'+' '+Trigger.old);
-            for(Contact cc:trigger.new){
-                if(cc.lastName=='ram'){
-                    cc.addError('ram cannot be the lastName');
+       // System.debug('These are my trigger .new values in before insert'+Trigger.new);
+       // System.debug('These are my trigger .old values in before insert'+Trigger.old);
+            for(Contact ac: trigger.new){
+                if(ac.LastName == 'Manas1'){
+                    ac.addError('Manas1 cannot be added as contact');
                 }
             }
-    
     }
-     if(Trigger.isUpdate){
-        system.debug('my trigger.new values'+' '+Trigger.new);
-        system.debug('my trigger.old values'+' '+Trigger.old);
-         for(contact cn:trigger.new){
-             if(trigger.oldmap.get(cn.id).lastName=='itcinfo' && cn.LastName=='capegemini'){
-                 cn.addError('name cannot be changed from itcinfo to capegemini');
-             }
-         }
-         //for(contact cc:trigger.old){
-           //  if(cc.LastName=='itcinfo'){
-             //    cc.addError('name cannot be changed from itcinfo');
-            // }
-         //}
-    
-    }
-        if(Trigger.isDelete){
-        system.debug('my trigger.new values'+' '+Trigger.new);
-        system.debug('my trigger.old values'+' '+Trigger.old);
-            
-    
-    }
-        
-    }
-    
-}
-
-------------------------------------------------------------------------------------------------------------------
-<apex:page standardController="Case" recordSetVar="reclist" >
-  Hello world {!$User.Username}
- 
-  <apex:pageBlock title="Case" tabStyle="Account" >
-   <apex:pageBlockSection title="Details">
-  <apex:outputField value="{!case.CaseNumber}"/>
-  </apex:pageBlockSection>
-  </apex:pageBlock>
-  
-  
-  
- 
-</apex:page>
-
--------------------------------------------------------------------------------------------------------------------
-
-Saving through vf
-
-<apex:page standardController="Case" >
-    Hello world {!$User.Username}
-    <apex:form>
-        
-        <apex:pageBlock title="Case Form" tabStyle="Account" >
-            <apex:pageBlockSection title="Details">
-                <apex:inputField value="{!case.CaseNumber}"/>
-                <apex:inputField value="{!case.Origin}"/>
-                <apex:inputField value="{!case.Type}"/>
-                <apex:inputField value="{!case.Product__c}"/>
-                
-            </apex:pageBlockSection>
-            <apex:pageblockButtons>
-                <apex:commandButton value="save" action="{!save}"/>
-                <apex:commandButton value="cancel" action="{!cancel}"/>
-            </apex:pageblockButtons>
-        </apex:pageBlock>
-    </apex:form>
-</apex:page>
-
--------------------------------------------------------------------------------------------------------
-
-merging 
-
-<apex:page standardController="Case" >
-    Hello world {!$User.Username}
-    <apex:form rendered="{!$CurrentPage.parameters.idd=='edit'}">
-        
-        <apex:pageBlock title="Case Form" tabStyle="Account" >
-            {!$CurrentPage.parameters.idd}
-            <apex:pageBlockSection title="Details">
-                <apex:inputField value="{!case.CaseNumber}"/>
-                <apex:inputField value="{!case.Origin}"/>
-                <apex:inputField value="{!case.Type}"/>
-                <apex:inputField value="{!case.Product__c}"/>
-                
-            </apex:pageBlockSection>
-            <apex:pageblockButtons>
-                <apex:commandButton value="save" action="{!save}"/>
-                <apex:commandButton value="cancel" action="{!cancel}"/>
-            </apex:pageblockButtons>
-        </apex:pageBlock>
-    </apex:form>
-     <apex:pageBlock rendered="{!$CurrentPage.parameters.idd=='detail'}" title="Case" tabStyle="Account" >
-   <apex:pageBlockSection title="Details">
-  <apex:outputField value="{!case.CaseNumber}"/>
-
-
-  </apex:pageBlockSection>
-  </apex:pageBlock>
-</apex:page>
-
-
--------------------------------------------------------------------------------------------------------------------------
-
-Page reference
-
-public with sharing class ContactclassforVF {
-    public String casetype{get;set;}
-        public String caseorigin{get;set;}
-            public Case con{get;set;}
-    public String caseid{get;set;}
-    public String product{get;set;}
-    public String casenum{get;set;}
-    public String errorMessage{get;set;}
-    public pageReference pg{get;set;}
-    
-    public pageReference Save1(){
-        
-       /* casetype='';
-        caseorigin='';
-        product='';
-        casenum='';
-        */
-        errorMessage='no errors';
-        try{
-            con=new Case();
-        con.type=casetype;
-             con.Origin=caseorigin;
-             //con.CaseNumber=casenum;
-        con.Product__c=product;
-        insert con;
-       caseid=con.id; 
-            system.debug(caseid);
-            pg=new pageReference('/'+con.id);
-            pg.setRedirect(true);
-        } 
-        catch(exception e){
-            errorMessage=e.getMessage();
-        }
-        
-        return pg;
-    }
-    
-
-}
-
----------------------------------------------------------------------------------------------------------
-
-CUSTOM CONTROLLERS
-
-VF PAGE:
-
-<apex:page controller="ContactclassforVF" >
-    <apex:form>
-<apex:pageBlock title="Case Form" tabStyle="Case" >
-         
-    <apex:pageBlockSection title="enter details">
-        
-        <apex:inputText label="origin" value="{!caseorigin}"/>
-        <apex:inputText label="type" value="{!casetype}"/>
-        <apex:inputText label="product" value="{!product}"/>
-        
-            </apex:pageBlockSection>
-    record created{!caseid}
-    Errors : {!errorMessage}
-            <apex:pageblockButtons>
-                <apex:commandButton value="save" action="{!save1}"/>
-                
-            </apex:pageblockButtons>
-</apex:pageBlock>
-         <apex:pageBlock title="Cases">
-   <apex:pageBlockTable value="{!reclist}" var="tablevar" > 
-  <apex:column value="{!tablevar.Type}"/>
-  </apex:pageBlockTable>
-  </apex:pageBlock>
-        </apex:form>
-</apex:page>
-
-*****************************************************************************
-
-CONTROLLER:
-
-public with sharing class ContactclassforVF {
-    public String casetype{get;set;}
-        public String caseorigin{get;set;}
-            public Case con{get;set;}
-    public String caseid{get;set;}
-    public String product{get;set;}
-    public String casenum{get;set;}
-    public String errorMessage{get;set;}
-    //public pageReference pg{get;set;}
-    public list<case> reclist{get;set;}
-    
-    public void save1(){
-        
-       /* casetype='';
-        caseorigin='';
-        product='';
-        casenum='';
-        */
-        errorMessage='no errors';
-        try{
-            con=new Case();
-        con.type=casetype;
-             con.Origin=caseorigin;
-             //con.CaseNumber=casenum;
-        con.Product__c=product;
-        insert con;
-       caseid=con.id; 
-            system.debug(caseid);
-            //pg=new pageReference('/'+con.id);
-            //pg.setRedirect(true);
-            getlist();
-        } 
-        catch(exception e){
-            errorMessage=e.getMessage();
-            
-            
+    if(Trigger.isUpdate){
+      //  System.debug('These are my trigger .new values in before insert'+Trigger.new);
+       // System.debug('These are my trigger .old values in before insert'+Trigger.old);
+       for(Contact ac: trigger.new){
+                if(trigger.oldmap.get(ac.id).LastName == 'ITCInfotech' && ac.LastName == 'capgemini'){
+                    ac.addError('ITCInfotech contact cannot be changed to Capgemini');
+                }
             }
-            
-        }
-        
-        //return pg;
-        public void getlist(){
-               reclist = new list<case>();
-                reclist=[select id, type, origin from case where createddate=today];
     }
-    
-
+    if(Trigger.isDelete){
+       // System.debug('These are my trigger .new values in before insert'+Trigger.new);
+      //  System.debug('These are my trigger .old values in before insert'+Trigger.old);
+        for(Contact ac: trigger.old){
+                if(ac.LastName == 'ITCInfotech'){
+                    ac.addError('ITCInfotech contact cannot be deleted');
+                }
+            }
+    }
+    }
+if(Trigger.isafter && Trigger.isInsert){
+    case cs;
+   // Id recid = [select id from recordtype where name ='Inquiry'].Id;
+    for(Contact c:trigger.new){
+        cs = new case();
+        system.debug(c.id);
+        cs.Contactid = c.id;
+      //  cs.RecordTypeId = recid;
+        cs.status ='New';
+        cs.origin ='Web';
+        cs.BusinessHoursId = '01m0o000000ll8EAAQ';
+        insert cs;
+    }
+}
 }
 
+==========================================Student Master Trigger
 
-************************************************************************************************
+trigger Student_MasterTriggerITC on Student_Master__c (before insert,before update,before delete,after insert,after update,after delete) {
+    if(Trigger.isBefore){
+        if(Trigger.isInsert){
+            for(Student_Master__c ac: trigger.new){
+                if(ac.Age__c <18){
+                    ac.addError('Age cannot be less than 18');
+                }else if(ac.Name.Length()<3){
+                    ac.addError('Name length cannot be less than 3');
+                }else if(ac.DOJ__c <date.today()){
+                    ac.addError('DOJ can not be less than todays date');
+                }
+            }
+    }
+    if(Trigger.isUpdate){
+       for(Student_Master__c ac: trigger.new){
+                if(trigger.oldmap.get(ac.id).Age__c != ac.Age__c){
+                    ac.addError('Age cannot be edited');
+                }if(trigger.oldmap.get(ac.id).	DOJ__c != ac.DOJ__c){
+                    ac.addError('DOJ cannot be edited');
+                }else if(trigger.oldmap.get(ac.id).Country__c == 'India' && ac.Country__c =='USA' ||ac.Country__c =='UAE'){
+                    ac.addError('India country name cannot be changed to USA and UAE');
+                }
+            }
+    }
 
-TEST CLASS FOR CONTROLLER:
+}
+}
 
+==================================StudentMasterTriggerHandler
+public class StudentMasterTriggerHandler {
+    public static void handler1(List<Student_Master__c>listofnewStudentMaster,List<Student_Master__c>listofoldStudentMaster,Map<Id,Student_Master__c>mapofStudentMaster){
+        if(Trigger.isBefore){
+        if(Trigger.isInsert){
+            for(Student_Master__c ac: listofnewStudentMaster){
+                if(ac.Age__c <18){
+                    ac.addError('Age cannot be less than 18');
+                }else if(ac.Name.Length()<3){
+                    ac.addError('Name length cannot be less than 3');
+                }else if(ac.DOJ__c <date.today()){
+                    ac.addError('DOJ can not be less than todays date');
+                }
+            }
+    }
+    if(Trigger.isUpdate){
+       for(Student_Master__c ac: listofnewStudentMaster){
+                if(mapofStudentMaster.get(ac.id).Age__c != ac.Age__c){
+                    ac.addError('Age cannot be edited');
+                }if(mapofStudentMaster.get(ac.id).	DOJ__c != ac.DOJ__c){
+                    ac.addError('DOJ cannot be edited');
+                }else if(mapofStudentMaster.get(ac.id).Country__c == 'India' && ac.Country__c =='USA' ||ac.Country__c =='UAE'){
+                    ac.addError('India country name cannot be changed to USA and UAE');
+                }
+            }
+    }
+
+}
+    }
+
+        }
+
+=====================================Testclassforstudentmastertriggers
 @isTest
-public class TestforContactVF {
-    static testmethod void testcases(){
+public class Testclassforstudentmastertriggers {
+      static testmethod void testthesecode(){
         Test.startTest();
-        ContactclassforVF c=new ContactclassforVF();
-        c.casetype='Other';
-        c.product='GC1040';
-        c.caseorigin='Web';
-        c.save1();
-        
-        test.stopTest();
-    }
-
-}
-
---------------------------------------------------------------------------------------------------------------------
-
-LIGHTNING COMPONENETS
-
-<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
-    <aura:attribute name="Amount" type="double" default="5000"/>
-    <aura:attribute name="RateOfInterest" type="double" default="8"/>
-    <aura:attribute name="MaturityAmount" type="double" default="0"/>
-    
-    <ui:inputNumber label="coupon amount" value="{!v.Amount}"/>
-    <ui:inputNumber label="Rate of interest" value="{!v.RateOfInterest}"/>
-    Maturity Value: <ui:outputNumber value="{!v.MaturityAmount}"/>
-        
-</aura:component>
-
-****************************************************************************************
-ENCAPSULATION WITHIN A CLASS
-
-<aura:application >
-    <c:ITCcomp1/>
-</aura:application>
-
-*****************************************************************************************
-
-CONTROLLER
-
-({
-	calculate : function(component, event, helper) {
-        var amt=component.get("v.Amount");
-        var rate=component.get("v.RateOfInterest");
-        var finalamt=(rate/100)+amt;
-        component.set("v.MaturityAmount",finalamt);
-		
-	}
-})
-
---------------------------------------------------------------------------------------------------------------------
-
-UI LIGHTNING
-
-<aura:application extends="force:slds" >
-
-****************************************************************************************************
-implements="lightning:actionOverride,force:lightningQuickAction,force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,lightning:actionOverride,force:hasRecordId"
-
-----------------------------------------------------------------------------------------------------------------
-
-CREATING LIGHTNING PAGES FOR SOJECTS:
-
-Apex class
-
- public with sharing  class ContactItcCreater {
-
-     static Contact con;
-    @AuraEnabled public static String insertRecords(String Name1){
-        try{
-             con=new Contact();
-            //con.LastName='Dhawan';
-            con.LastName=Name1;
-            con.Confirmed__c=false;
-            insert con;
-            system.debug(con.id);
-        }
-        catch(exception e){
-            system.debug(e.getMessage());
-            return e.getMessage();
-        }
-        return con.id;
-    }
-    public static void deleteRecords(String recid){
-        try{
-            Contact contdelete=new Contact();
-            contdelete=[select id from contact where id =:recid];
-            delete contdelete;
-            
-        }
-        catch(exception e){
-            system.debug(e.getMessage());
-        }
-    }
-
-
- public static void updateRecords(String recid, string passeddata){
-        try{
-            Contact conttoupdate=new Contact();
-            conttoupdate=[select id,department from contact where id =:recid];
-            conttoupdate.Department=passeddata;
-            update conttoupdate;
-        }
-        catch(exception e){
-            system.debug(e.getMessage());
-        }
+        Student_Master__c sm = new Student_Master__c();
+        sm.Name = 'Tomand';
+        sm.Age__c= 20;
+        sm.Country__c='India';
+        sm.DOJ__c = Date.today();
+        insert sm;
+        sm.Name = 'PK';
+        sm.Age__c = 21;
+        sm.Country__c= 'UAE';
+        sm.DOJ__c = Date.today();
+        update sm;
+        Test.stopTest();
     }
 }
 
-******************************************************************************************
 
-Components:
-
-************************************************************************************************
-
-Lightning design system 
-
-----------------------------------------------------------------------------------------------------------
-
-HEROKUAPP
-
-https://th-apex-http-callout.herokuapp.com/animals
-
------------------------------------------------------------------------------------------------------
-CONNECTED APPS:
-
-Consumer Key: 3MVG9pe2TCoA1Pf5yviStxs30o0c0X3JfuYN1J9q8A20gsONkS840JLj81eIlP8MyolsmWnubHcpDvYNEuyMD
-Consumer Secret: BFEEB214179860C5C1A7A8292709591EFDDD960F553DE14CACCFC635DC36123E
--------------------------------------------------------------------------------------------------------
-
-SFDX:
-
-1. create new project with manifest
-2.sfdx force:project:create –projectname
-3.sfdx force:auth:web:login --setdefaultdevhubusername --setalias sfdcevangel
-browser will open ,login with correct details
-4.sfdx force:org:open -u
-5. create package .xml next to json file then navigate to folder and retriev
-6. sfdx force:mdapi:retrieve -r metadata -u narenrr@yahoo.com -k package.xml
+========================================================================
+IF(ISBLANK( TEXT( Phone_Type__c )), 0, 0.025) + 
+IF(ISBLANK( Phone_Number__c ), 0, 0.025)
