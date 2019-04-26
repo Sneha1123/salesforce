@@ -1,0 +1,363 @@
+Integer serialnumber = 0;
+serialnumber++;
+string name='Manas';
+system.debug('Hello World'+serialnumber+' '+name);
+Set<String> strset1 = new set<STring>();
+strset1.add('Rose');
+strset1.add('Lily');
+strset1.add('jasmine');
+system.debug('data from set'+strset1);
+List<String> Strlist = new List<string>();
+strlist.add('Rose');
+strlist.add('Lily');
+strlist.add('jasmine');
+system.debug('data from list'+strlist.size());
+for (String x:strlist){
+    system.debug('inside for'+' '+x);
+}
+
+Map<Integer,String> mapvals1 = new Map<Integer,String>();
+    
+    mapvals1.put(1,'Bangalore');
+    mapvals1.put(2,'Pune');
+    mapvals1.put(3,'Bhubaneswar');
+    mapvals1.put(4,'Mumbai');
+system.debug(mapvals1.get(2));
+
+For(Integer m:mapvals1.keyset()){
+    system.debug(m);//This will give you the key
+    system.debug(mapvals1.get(m));//This will give you the value for key
+}
+
+===========================================
+
+String z='certified developer 1';
+system.debug(z);
+list<account> aclist= new list<account>();
+aclist= [Select id,name,type from account where type in 'Prospect'];
+system.debug(aclist);
+For(account ac:aclist){
+    system.debug(ac.name+'::'+ac.type);
+}
+
+=========================================
+
+String z='certified developer 1';
+system.debug(z);
+list<contact> aclist= new list<contact>();
+aclist= [Select Name,Title from contact ];
+system.debug(aclist);
+For(contact ac:aclist){
+    system.debug(ac.Name+'::'+ac.Title);
+}
+
+==========================================
+
+try{
+Contact cont = new Contact();
+//cont.LastName = 'Kohli';
+insert cont;
+system.debug(cont.id);
+}catch(exception e){
+    system.debug(e.getMessage());
+}
+
+======================================
+
+public with sharing class ContactCreator {
+    public Static void insertrecords(string,Name1){
+      try{
+Contact cont = new Contact();
+//cont.LastName = 'Kohli';
+cont.LastName = Name1;
+insert cont;
+system.debug(cont.id);
+}catch(exception e){
+    system.debug(e.getMessage());
+}
+  
+    }
+
+}
+
+Debug
+ContactCreator1.insrecords('Dhoni');
+==============================================
+Public with sharing class ContactCreater {
+    public static void insertrecords(String Name1){
+        try{
+            Contact cont = new Contact();
+            cont.LastName = 'Kholi';
+            cont.LastName = Name1;
+            //cont.Languages__c = 'Hindi';
+            insert cont;
+            system.debug(cont.id);
+        }catch(exception e){
+            system.debug(e.getMessage());
+        }  
+    }
+    
+    Public static void deleterecord(String recid){
+        try{
+            Contact contdel = new Contact();
+            contdel = [select id from contact where id=:recid];
+            delete contdel;
+        }catch(exception e){
+            system.debug(e.getMessage());
+        }
+    }
+}
+
+==========================================
+
+ public static void updaterecords(String recid,String passeddate){
+    try{
+        contact conttoupdate = new contact();
+        conttoupdate= [select id,department from contact where id=:recid];
+        conttoupdate.department = passeddate;
+        update conttoupdate;
+        }catch(exception e){
+            system.debug(e.getMessage());
+        }
+    }
+}
+
+===============================================
+try{
+    List<contact> contactlist = new list<contact>();
+    Contact cont;
+String Name1='harbajan';
+    for(integer x=0;x<199;x++){
+        cont = new Contact();
+        cont.LastName = Name1 + X;
+        contactlist.add(cont);
+        //insert cont;
+        //system.debug(cont.id);
+        
+    }
+    insert contactlist;
+    }catch(exception e){
+            system.debug(e.getMessage());
+        }
+
+==========================================
+List<Contact> contlst = new List<Contact>();
+contlst = [select id from contact where Name like '%harbajan%'];
+delete contlst;
+
+============================================
+
+List<Contact> c = new List<Contact>();
+try{
+    contact cont;
+    cont = new Contact(Age__c=34,LastName='raju1');
+    c.add(cont);
+    cont = new Contact(Age__c=9,LastName='raju1');
+    c.add(cont);
+    cont = new Contact(Age__c=34,LastName='ra');
+    c.add(cont);
+    insert(c);
+    
+    
+}catch(exception e){
+            system.debug(e.getMessage());
+        }
+
+==================================================
+List<Contact> c = new List<Contact>();
+try{
+    contact cont;
+    cont = new Contact(Age__c=34,LastName='raju1');
+    c.add(cont);
+    cont = new Contact(Age__c=9,LastName='raju1');
+    c.add(cont);
+    cont = new Contact(Age__c=34,LastName='ra');
+    c.add(cont);
+    //insert(c);
+    Database.SaveResult[] sr = Database.insert(c,false);
+    For(Database.SaveResult s:sr){
+        if(s.isSuccess()){
+            System.debug(s.getId());
+        }for(Database.error err:s.getErrors())
+        {
+            system.debug(err.getMessage());
+        }
+    }   
+}catch(exception e){
+            system.debug(e.getMessage());
+        }
+
+=============================================
+
+Contact c = new Contact();
+//SavePoint sp = Database.setSavepoint();
+   c = [select id,lastname from contact where id ='0030o00002fhPO2'];
+   c.lastname = 'Ravi1';
+   update c;
+   //Database.rollback(sp);
+
+==========================Exception
+Contact c = new Contact();
+try{
+    c =[select id from contact limit 1];
+    system.debug(c.Lastname);
+
+===========================
+List<Contact> c = new List<Contact>();
+Contact d = new Contact();
+try{
+    //insert c;
+    Database.SaveResult[] sr = Database.insert(d,false);
+    For(Database.SaveResult s:sr){
+        if(s.isSuccess()){
+            System.debug(s.getId());
+        }for(Database.error err:s.getErrors())
+        {
+            system.debug(err.getMessage());
+        }
+    }
+    //insert c;
+    //c =[select type from account];
+    d = [select id from contact limit 1];
+    system.debug(d.Lastname);
+    }catch(exception e){
+    system.debug(e.getMessage());
+}
+    }catch(exception e){
+    system.debug(e.getMessage());
+}
+
+==========================================Contact Trigger
+trigger ContactTriggerITC on Contact (before insert,before update,before delete,after insert,after update,after delete) {
+    
+    if(Trigger.isBefore){
+        if(Trigger.isInsert){
+       // System.debug('These are my trigger .new values in before insert'+Trigger.new);
+       // System.debug('These are my trigger .old values in before insert'+Trigger.old);
+            for(Contact ac: trigger.new){
+                if(ac.LastName == 'Manas1'){
+                    ac.addError('Manas1 cannot be added as contact');
+                }
+            }
+    }
+    if(Trigger.isUpdate){
+      //  System.debug('These are my trigger .new values in before insert'+Trigger.new);
+       // System.debug('These are my trigger .old values in before insert'+Trigger.old);
+       for(Contact ac: trigger.new){
+                if(trigger.oldmap.get(ac.id).LastName == 'ITCInfotech' && ac.LastName == 'capgemini'){
+                    ac.addError('ITCInfotech contact cannot be changed to Capgemini');
+                }
+            }
+    }
+    if(Trigger.isDelete){
+       // System.debug('These are my trigger .new values in before insert'+Trigger.new);
+      //  System.debug('These are my trigger .old values in before insert'+Trigger.old);
+        for(Contact ac: trigger.old){
+                if(ac.LastName == 'ITCInfotech'){
+                    ac.addError('ITCInfotech contact cannot be deleted');
+                }
+            }
+    }
+    }
+if(Trigger.isafter && Trigger.isInsert){
+    case cs;
+   // Id recid = [select id from recordtype where name ='Inquiry'].Id;
+    for(Contact c:trigger.new){
+        cs = new case();
+        system.debug(c.id);
+        cs.Contactid = c.id;
+      //  cs.RecordTypeId = recid;
+        cs.status ='New';
+        cs.origin ='Web';
+        cs.BusinessHoursId = '01m0o000000ll8EAAQ';
+        insert cs;
+    }
+}
+}
+
+==========================================Student Master Trigger
+
+trigger Student_MasterTriggerITC on Student_Master__c (before insert,before update,before delete,after insert,after update,after delete) {
+    if(Trigger.isBefore){
+        if(Trigger.isInsert){
+            for(Student_Master__c ac: trigger.new){
+                if(ac.Age__c <18){
+                    ac.addError('Age cannot be less than 18');
+                }else if(ac.Name.Length()<3){
+                    ac.addError('Name length cannot be less than 3');
+                }else if(ac.DOJ__c <date.today()){
+                    ac.addError('DOJ can not be less than todays date');
+                }
+            }
+    }
+    if(Trigger.isUpdate){
+       for(Student_Master__c ac: trigger.new){
+                if(trigger.oldmap.get(ac.id).Age__c != ac.Age__c){
+                    ac.addError('Age cannot be edited');
+                }if(trigger.oldmap.get(ac.id).	DOJ__c != ac.DOJ__c){
+                    ac.addError('DOJ cannot be edited');
+                }else if(trigger.oldmap.get(ac.id).Country__c == 'India' && ac.Country__c =='USA' ||ac.Country__c =='UAE'){
+                    ac.addError('India country name cannot be changed to USA and UAE');
+                }
+            }
+    }
+
+}
+}
+
+==================================StudentMasterTriggerHandler
+public class StudentMasterTriggerHandler {
+    public static void handler1(List<Student_Master__c>listofnewStudentMaster,List<Student_Master__c>listofoldStudentMaster,Map<Id,Student_Master__c>mapofStudentMaster){
+        if(Trigger.isBefore){
+        if(Trigger.isInsert){
+            for(Student_Master__c ac: listofnewStudentMaster){
+                if(ac.Age__c <18){
+                    ac.addError('Age cannot be less than 18');
+                }else if(ac.Name.Length()<3){
+                    ac.addError('Name length cannot be less than 3');
+                }else if(ac.DOJ__c <date.today()){
+                    ac.addError('DOJ can not be less than todays date');
+                }
+            }
+    }
+    if(Trigger.isUpdate){
+       for(Student_Master__c ac: listofnewStudentMaster){
+                if(mapofStudentMaster.get(ac.id).Age__c != ac.Age__c){
+                    ac.addError('Age cannot be edited');
+                }if(mapofStudentMaster.get(ac.id).	DOJ__c != ac.DOJ__c){
+                    ac.addError('DOJ cannot be edited');
+                }else if(mapofStudentMaster.get(ac.id).Country__c == 'India' && ac.Country__c =='USA' ||ac.Country__c =='UAE'){
+                    ac.addError('India country name cannot be changed to USA and UAE');
+                }
+            }
+    }
+
+}
+    }
+
+        }
+
+=====================================Testclassforstudentmastertriggers
+@isTest
+public class Testclassforstudentmastertriggers {
+      static testmethod void testthesecode(){
+        Test.startTest();
+        Student_Master__c sm = new Student_Master__c();
+        sm.Name = 'Tomand';
+        sm.Age__c= 20;
+        sm.Country__c='India';
+        sm.DOJ__c = Date.today();
+        insert sm;
+        sm.Name = 'PK';
+        sm.Age__c = 21;
+        sm.Country__c= 'UAE';
+        sm.DOJ__c = Date.today();
+        update sm;
+        Test.stopTest();
+    }
+}
+
+
+========================================================================
+IF(ISBLANK( TEXT( Phone_Type__c )), 0, 0.025) + 
+IF(ISBLANK( Phone_Number__c ), 0, 0.025)

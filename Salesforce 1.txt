@@ -1,0 +1,531 @@
+//ContactItcCreater cc=new ContactItcCreater();
+	//cc.insertRecords();
+	/*ContactItcCreater.insertRecords('Ravi');
+	list<Contact> conlist =new list<Contact>();
+	conlist=[select id from contact where LastName like '%Dhawan%'];
+	delete conlist;*/
+	//ContactItcCreater.deleteRecords('0030o00002fnyL2AAI');
+	//ContactItcCreater.updateRecords('0030o00002fnyKnAAI','Sociology');
+	 /*try{
+	
+	     String Name1='harbhajan';
+	
+	            //con.LastName='Dhawan';
+	     for(integer i=0;i<300;i++){
+	          Contact con=new Contact();
+	            con.LastName=Name1;
+	            con.Confirmed__c=false;
+	            insert con;
+	            system.debug(con.id);
+	        }
+	     }
+	        catch(exception e){
+	            system.debug(e.getMessage());
+	        }
+	*//*
+	String Name1='Dhawan';
+	list<Contact> conlist=new list<Contact>();
+	for(integer i=0;i<199;i++)
+	{
+	    Contact con=new Contact();
+	    con.LastName=Name1;
+	    con.Confirmed__c=false;
+	    conlist.add(con);
+	
+	}
+	insert conlist;
+	*/
+	//list<Contact> condelete= new list<Contact>();
+	//Contact cont=new Contact();
+	//condelete=[select id from contact where LastName like'%Dhawan%'];           
+	//delete condelete;
+	
+	
+	 list<Contact> conlist=new list<Contact>();
+	
+	try{
+	     Contact con=new Contact(Age__c=34,LastName='raju');
+	            conlist.add(con);
+	       con=new Contact(Age__c=4,LastName='raju1');
+	            conlist.add(con);
+	       con=new Contact(Age__c=56,LastName='ra');
+	            conlist.add(con);
+	    //insert (conlist);
+	    Database.SaveResult[] sr=database.insert(conlist,false);
+	    for(database.SaveResult s:sr){
+	        if(s.isSuccess()){
+	            system.debug(s.getId());
+	        }
+	        for(database.Error err:s.getErrors())
+	        {
+	            system.debug(err.getMessage());
+	        }
+	    }
+	        }
+	
+	        catch(exception e){
+	            system.debug(e.getMessage());
+	        }
+	
+	
+	---------------------------------------------------------------------------------------------------------------
+	Exception
+	
+	contact c=new contact();
+	try{
+	//c=[select id,name from contact limit 1];
+	//system.debug(c.lastName);
+	    update c;
+	}
+	catch(exception e){
+	    system.debug(e.getMessage()+' '+e.getTypeName());
+	}
+	
+	----------------------------------------------------------------------------------------------------------------
+	
+	Triggers
+	
+	trigger ContactTriggerItc on Contact (before insert,before update,before delete) {
+	    if (trigger.isbefore){
+	        if(Trigger.isInsert){
+	        system.debug('my trigger.new values'+' '+Trigger.new);
+	        system.debug('my trigger.old values'+' '+Trigger.old);
+	            for(Contact cc:trigger.new){
+	                if(cc.lastName=='ram'){
+	                    cc.addError('ram cannot be the lastName');
+	                }
+	            }
+	
+	    }
+	     if(Trigger.isUpdate){
+	        system.debug('my trigger.new values'+' '+Trigger.new);
+	        system.debug('my trigger.old values'+' '+Trigger.old);
+	         for(contact cn:trigger.new){
+	             if(trigger.oldmap.get(cn.id).lastName=='itcinfo' && cn.LastName=='capegemini'){
+	                 cn.addError('name cannot be changed from itcinfo to capegemini');
+	             }
+	         }
+	         //for(contact cc:trigger.old){
+	           //  if(cc.LastName=='itcinfo'){
+	             //    cc.addError('name cannot be changed from itcinfo');
+	            // }
+	         //}
+	
+	    }
+	        if(Trigger.isDelete){
+	        system.debug('my trigger.new values'+' '+Trigger.new);
+	        system.debug('my trigger.old values'+' '+Trigger.old);
+	
+	
+	    }
+	
+	    }
+	
+	}
+	
+	------------------------------------------------------------------------------------------------------------------
+	<apex:page standardController="Case" recordSetVar="reclist" >
+	  Hello world {!$User.Username}
+	
+	  <apex:pageBlock title="Case" tabStyle="Account" >
+	   <apex:pageBlockSection title="Details">
+	  <apex:outputField value="{!case.CaseNumber}"/>
+	  </apex:pageBlockSection>
+	  </apex:pageBlock>
+	
+	
+	
+	
+	</apex:page>
+	
+	-------------------------------------------------------------------------------------------------------------------
+	
+	Saving through vf
+	
+	<apex:page standardController="Case" >
+	    Hello world {!$User.Username}
+	    <apex:form>
+	
+	        <apex:pageBlock title="Case Form" tabStyle="Account" >
+	            <apex:pageBlockSection title="Details">
+	                <apex:inputField value="{!case.CaseNumber}"/>
+	                <apex:inputField value="{!case.Origin}"/>
+	                <apex:inputField value="{!case.Type}"/>
+	                <apex:inputField value="{!case.Product__c}"/>
+	
+	            </apex:pageBlockSection>
+	            <apex:pageblockButtons>
+	                <apex:commandButton value="save" action="{!save}"/>
+	                <apex:commandButton value="cancel" action="{!cancel}"/>
+	            </apex:pageblockButtons>
+	        </apex:pageBlock>
+	    </apex:form>
+	</apex:page>
+	
+	-------------------------------------------------------------------------------------------------------
+	
+	merging 
+	
+	<apex:page standardController="Case" >
+	    Hello world {!$User.Username}
+	    <apex:form rendered="{!$CurrentPage.parameters.idd=='edit'}">
+	
+	        <apex:pageBlock title="Case Form" tabStyle="Account" >
+	            {!$CurrentPage.parameters.idd}
+	            <apex:pageBlockSection title="Details">
+	                <apex:inputField value="{!case.CaseNumber}"/>
+	                <apex:inputField value="{!case.Origin}"/>
+	                <apex:inputField value="{!case.Type}"/>
+	                <apex:inputField value="{!case.Product__c}"/>
+	
+	            </apex:pageBlockSection>
+	            <apex:pageblockButtons>
+	                <apex:commandButton value="save" action="{!save}"/>
+	                <apex:commandButton value="cancel" action="{!cancel}"/>
+	            </apex:pageblockButtons>
+	        </apex:pageBlock>
+	    </apex:form>
+	     <apex:pageBlock rendered="{!$CurrentPage.parameters.idd=='detail'}" title="Case" tabStyle="Account" >
+	   <apex:pageBlockSection title="Details">
+	  <apex:outputField value="{!case.CaseNumber}"/>
+	
+	
+	  </apex:pageBlockSection>
+	  </apex:pageBlock>
+	</apex:page>
+	
+	
+	-------------------------------------------------------------------------------------------------------------------------
+	
+	Page reference
+	
+	public with sharing class ContactclassforVF {
+	    public String casetype{get;set;}
+	        public String caseorigin{get;set;}
+	            public Case con{get;set;}
+	    public String caseid{get;set;}
+	    public String product{get;set;}
+	    public String casenum{get;set;}
+	    public String errorMessage{get;set;}
+	    public pageReference pg{get;set;}
+	
+	    public pageReference Save1(){
+	
+	       /* casetype='';
+	        caseorigin='';
+	        product='';
+	        casenum='';
+	        */
+	        errorMessage='no errors';
+	        try{
+	            con=new Case();
+	        con.type=casetype;
+	             con.Origin=caseorigin;
+	             //con.CaseNumber=casenum;
+	        con.Product__c=product;
+	        insert con;
+	       caseid=con.id; 
+	            system.debug(caseid);
+	            pg=new pageReference('/'+con.id);
+	            pg.setRedirect(true);
+	        } 
+	        catch(exception e){
+	            errorMessage=e.getMessage();
+	        }
+	
+	        return pg;
+	    }
+	
+	
+	}
+	
+	---------------------------------------------------------------------------------------------------------
+	
+	CUSTOM CONTROLLERS
+	
+	VF PAGE:
+	
+	<apex:page controller="ContactclassforVF" >
+	    <apex:form>
+	<apex:pageBlock title="Case Form" tabStyle="Case" >
+	
+	    <apex:pageBlockSection title="enter details">
+	
+	        <apex:inputText label="origin" value="{!caseorigin}"/>
+	        <apex:inputText label="type" value="{!casetype}"/>
+	        <apex:inputText label="product" value="{!product}"/>
+	
+	            </apex:pageBlockSection>
+	    record created{!caseid}
+	    Errors : {!errorMessage}
+	            <apex:pageblockButtons>
+	                <apex:commandButton value="save" action="{!save1}"/>
+	
+	            </apex:pageblockButtons>
+	</apex:pageBlock>
+	         <apex:pageBlock title="Cases">
+	   <apex:pageBlockTable value="{!reclist}" var="tablevar" > 
+	  <apex:column value="{!tablevar.Type}"/>
+	  </apex:pageBlockTable>
+	  </apex:pageBlock>
+	        </apex:form>
+	</apex:page>
+	
+	*****************************************************************************
+	
+	CONTROLLER:
+	
+	public with sharing class ContactclassforVF {
+	    public String casetype{get;set;}
+	        public String caseorigin{get;set;}
+	            public Case con{get;set;}
+	    public String caseid{get;set;}
+	    public String product{get;set;}
+	    public String casenum{get;set;}
+	    public String errorMessage{get;set;}
+	    //public pageReference pg{get;set;}
+	    public list<case> reclist{get;set;}
+	
+	    public void save1(){
+	
+	       /* casetype='';
+	        caseorigin='';
+	        product='';
+	        casenum='';
+	        */
+	        errorMessage='no errors';
+	        try{
+	            con=new Case();
+	        con.type=casetype;
+	             con.Origin=caseorigin;
+	             //con.CaseNumber=casenum;
+	        con.Product__c=product;
+	        insert con;
+	       caseid=con.id; 
+	            system.debug(caseid);
+	            //pg=new pageReference('/'+con.id);
+	            //pg.setRedirect(true);
+	            getlist();
+	        } 
+	        catch(exception e){
+	            errorMessage=e.getMessage();
+	
+	
+	            }
+	
+	        }
+	
+	        //return pg;
+	        public void getlist(){
+	               reclist = new list<case>();
+	                reclist=[select id, type, origin from case where createddate=today];
+	    }
+	
+	
+	}
+	
+	
+	************************************************************************************************
+	
+	TEST CLASS FOR CONTROLLER:
+	
+	@isTest
+	public class TestforContactVF {
+	    static testmethod void testcases(){
+	        Test.startTest();
+	        ContactclassforVF c=new ContactclassforVF();
+	        c.casetype='Other';
+	        c.product='GC1040';
+	        c.caseorigin='Web';
+	        c.save1();
+	
+	        test.stopTest();
+	    }
+	
+	}
+	
+	--------------------------------------------------------------------------------------------------------------------
+	
+	LIGHTNING COMPONENETS
+	
+	<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	    <aura:attribute name="Amount" type="double" default="5000"/>
+	    <aura:attribute name="RateOfInterest" type="double" default="8"/>
+	    <aura:attribute name="MaturityAmount" type="double" default="0"/>
+	
+	    <ui:inputNumber label="coupon amount" value="{!v.Amount}"/>
+	    <ui:inputNumber label="Rate of interest" value="{!v.RateOfInterest}"/>
+	    Maturity Value: <ui:outputNumber value="{!v.MaturityAmount}"/>
+	
+	</aura:component>
+	
+	****************************************************************************************
+	ENCAPSULATION WITHIN A CLASS
+	
+	<aura:application >
+	    <c:ITCcomp1/>
+	</aura:application>
+	
+	*****************************************************************************************
+	
+	CONTROLLER
+	
+	({
+		calculate : function(component, event, helper) {
+	        var amt=component.get("v.Amount");
+	        var rate=component.get("v.RateOfInterest");
+	        var finalamt=(rate/100)+amt;
+	        component.set("v.MaturityAmount",finalamt);
+	
+		}
+	})
+	
+	--------------------------------------------------------------------------------------------------------------------
+	
+	UI LIGHTNING
+	
+	<aura:application extends="force:slds" >
+	
+	****************************************************************************************************
+	implements="lightning:actionOverride,force:lightningQuickAction,force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,lightning:actionOverride,force:hasRecordId"
+	
+	----------------------------------------------------------------------------------------------------------------
+	
+	CREATING LIGHTNING PAGES FOR SOJECTS:
+	
+	Apex class
+	
+	 public with sharing  class ContactItcCreater {
+	
+	     static Contact con;
+	    @AuraEnabled public static String insertRecords(String Name1){
+	        try{
+	             con=new Contact();
+	            //con.LastName='Dhawan';
+	            con.LastName=Name1;
+	            con.Confirmed__c=false;
+	            insert con;
+	            system.debug(con.id);
+	        }
+	        catch(exception e){
+	            system.debug(e.getMessage());
+	            return e.getMessage();
+	        }
+	        return con.id;
+	    }
+	    public static void deleteRecords(String recid){
+	        try{
+	            Contact contdelete=new Contact();
+	            contdelete=[select id from contact where id =:recid];
+	            delete contdelete;
+	
+	        }
+	        catch(exception e){
+	            system.debug(e.getMessage());
+	        }
+	    }
+	
+	
+	 public static void updateRecords(String recid, string passeddata){
+	        try{
+	            Contact conttoupdate=new Contact();
+	            conttoupdate=[select id,department from contact where id =:recid];
+	            conttoupdate.Department=passeddata;
+	            update conttoupdate;
+	        }
+	        catch(exception e){
+	            system.debug(e.getMessage());
+	        }
+	    }
+	}
+	
+	******************************************************************************************
+	
+	Components:
+	
+	************************************************************************************************
+	
+	Lightning design system 
+	
+	----------------------------------------------------------------------------------------------------------
+	
+	HEROKUAPP
+	
+	https://th-apex-http-callout.herokuapp.com/animals
+	
+	-----------------------------------------------------------------------------------------------------
+	CONNECTED APPS:
+	
+	Consumer Key: 3MVG9pe2TCoA1Pf5yviStxs30o0c0X3JfuYN1J9q8A20gsONkS840JLj81eIlP8MyolsmWnubHcpDvYNEuyMD
+	Consumer Secret: BFEEB214179860C5C1A7A8292709591EFDDD960F553DE14CACCFC635DC36123E
+	-------------------------------------------------------------------------------------------------------
+	
+	SFDX:
+	
+	1. create new project with manifest
+	2.sfdx force:project:create ?projectname
+	3.sfdx force:auth:web:login --setdefaultdevhubusername --setalias sfdcevangel
+	browser will open ,login with correct details
+	4.sfdx force:org:open -u
+	5. create package .xml next to json file then navigate to folder and retriev
+	6. sfdx force:mdapi:retrieve -r metadata -u narenrr@yahoo.com -k package.xml
+  58  trigger.txt 
+@@ -0,0 +1,58 @@
+	trigger ContactTriggerItc on Contact (before insert,before update,before delete) {
+	    if (trigger.isbefore){
+	        if(Trigger.isInsert){
+	        system.debug('my trigger.new values'+' '+Trigger.new);
+	        system.debug('my trigger.old values'+' '+Trigger.old);
+	            for(Contact cc:trigger.new){
+	                if(cc.lastName=='ram'){
+	                    cc.addError('ram cannot be the lastName');
+	                }
+	            }
+	
+	    }
+	     if(Trigger.isUpdate){
+	        system.debug('my trigger.new values'+' '+Trigger.new);
+	        system.debug('my trigger.old values'+' '+Trigger.old);
+	         for(contact cn:trigger.new){
+	             if(trigger.oldmap.get(cn.id).lastName=='itcinfo' && cn.LastName=='capegemini'){
+	                 cn.addError('name cannot be changed from itcinfo to capegemini');
+	             }
+	         }
+	         //for(contact cc:trigger.old){
+	           //  if(cc.LastName=='itcinfo'){
+	             //    cc.addError('name cannot be changed from itcinfo');
+	            // }
+	         //}
+	
+	    }
+	        if(Trigger.isDelete){
+	        system.debug('my trigger.new values'+' '+Trigger.new);
+	        system.debug('my trigger.old values'+' '+Trigger.old);
+	            for(contact cc:trigger.old){
+	                if(cc.lastName=='cape'){
+	                    cc.addError('cannot be deleted');
+	                }
+	            } 
+	
+	    }
+	
+	    }
+	      /*if(trigger.isafter){
+	        if(trigger.isinsert){
+	
+	            //case cs=new case();
+	           // Id recid =[select id from recordtype where name='Enquiry'].Id;
+	                for (contact c:trigger.new){
+	                    system.debug(c.Id);
+	                   /* cs.contactId=c.id;
+	                    cs.Product__c='GC1040';
+	                    cs.Type='other';
+	                    cs.RecordTypeId='Enquiry';
+	                    cs.status='New Enquiry';
+	                    cs.Origin='Phone';
+	                    insert cs;*/
+	                }
+	        }
+	
+	    }*/
+	}
