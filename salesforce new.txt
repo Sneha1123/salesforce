@@ -361,3 +361,401 @@ public class Testclassforstudentmastertriggers {
 ========================================================================
 IF(ISBLANK( TEXT( Phone_Type__c )), 0, 0.025) + 
 IF(ISBLANK( Phone_Number__c ), 0, 0.025)
+
+=====================================
+<apex:page StandardController="Account" recordSetVar="reclist">
+   Hello World{!$User.Username}
+   <apex:pageBlock >
+   <apex:pageBlockTable value="{!reclist}" var="tablevar">
+   <apex:column value="{!tablevar.Name}"/>
+   <apex:column value="{!tablevar.Type}"/>
+  
+   </apex:pageBlockTable>
+   </apex:pageBlock>
+  
+</apex:page>
+
+==============================
+<apex:page StandardController="Student_Master__c" recordSetVar="reclist">
+   Hello World{!$User.Username}
+   <apex:pageBlock title="Student_Master__c" tabStyle="Name" >
+   <apex:pageBlockTable value="{!reclist}" var="tablevar" >
+   <apex:column value="{!tablevar.Name}"/>
+   <apex:column value="{!tablevar.Age__c}"/>
+  
+   </apex:pageBlockTable>
+   </apex:pageBlock>
+  
+</apex:page>
+
+======================================
+<apex:page StandardController="Account" >
+   Hello World{!$User.Username}
+   <apex:pageBlock title="Account" tabStyle="Account" >
+   <apex:pageBlockSection title="Details"/>
+   <apex:outputField value="{!Account.Name}"/>
+   <apex:outputField value="{!Account.Type}"/>
+   <apex:pageBlockSection title="Related List">
+   <Apex:relatedList list="contacts"/>
+   </apex:pageBlockSection>
+   </apex:pageBlock>
+   </apex:page>
+
+https://c.ap8.visual.force.com/apex/myhelloworld1?id=0010o00002DmkAvAAJ
+
+=======================================================
+<apex:page StandardController="Student_Master__c" >
+   Hello World{!$User.Username}
+   <apex:pageBlock title="Student_Master__c" tabStyle="Student_Master__c" >
+   <apex:pageBlockSection title="Details"/>
+   <apex:outputField value="{!Student_Master__c.Name}"/>
+   <apex:outputField value="{!Student_Master__c.Age__c}"/>
+   <apex:pageBlockSection title="Related List">
+   <Apex:relatedList list="Student_Marks__r"/>
+   </apex:pageBlockSection>
+   </apex:pageBlock>
+   </apex:page>
+
+===================================================
+<apex:page StandardController="Contact" >
+   Hello World{!$User.Username}
+   
+   <apex:form >
+   <apex:pageBlock title="Contact form" tabStyle="Account" >
+   <apex:pageBlockSection title="Contact form">
+   <apex:inputField value="{!Contact.LastName}"/>
+   <apex:inputField value="{!Contact.Email}"/>
+   </apex:pageBlockSection>
+   
+   <apex:pageBlockButtons >
+   
+   <apex:commandbutton value="save" action="{!save}"/>
+   <apex:commandbutton value="cancel" action="{!cancel}"/>
+   
+   </apex:pageBlockButtons>
+   
+   
+   
+   </apex:pageBlock>
+   
+   </apex:form>
+   </apex:page>
+
+============================================================
+<apex:page StandardController="Contact" >
+   
+   
+   <apex:form rendered="{!$CurrentPage.parameters.idd=='edit'}" >
+   <apex:pageBlock title="Contact" tabStyle="Account" >
+   <apex:pageBlockSection >
+   <apex:inputField value="{!Contact.LastName}"/>
+   <apex:inputField value="{!Contact.Email}"/>
+   </apex:pageBlockSection>
+   
+   <apex:pageBlockButtons >
+   
+   <apex:commandbutton value="save" action="{!save}"/>
+   <apex:commandbutton value="cancel" action="{!cancel}"/>
+   
+   </apex:pageBlockButtons>
+   </apex:pageBlock>
+   </apex:form>
+   <apex:pageBlock rendered="{!$CurrentPage.parameters.idd=='detail'}" title="Contact" tabStyle="Account"  >
+   <apex:pageBlockSection title="Details">
+  <apex:outputField value="{!Contact.LastName}"/>
+  <apex:outputField value="{!Contact.Email}"/>
+
+   </apex:pageBlockSection>
+   </apex:pageBlock>
+   </apex:page>
+
+
+
+https://c.ap8.visual.force.com/apex/myhelloworld2?idd=edit
+https://c.ap8.visual.force.com/apex/myhelloworld2?idd=detail&id=0030o00002gnzFLAAY
+
+
+==============================
+public with sharing class ContactClassForVF {
+    public string contactname {get;set;}
+    public string contactemail{get;set;}
+    public Contact con{get;set;}
+    public string contactid{get;set;}
+    public string errormessage{get;set;}
+    public pagereference pg{get;set;}
+    public pagereference Save1()
+     { errormessage='No errors so far';
+        try{
+            con = new contact();
+            system.debug(contactname);
+            con.LastName =contactname;
+            con.email = contactemail;
+            insert con;
+            contactid = con.id;
+            pg= new pagereference('/'+con.id);
+            pg.setRedirect(true);
+        }catch(exception e){
+            errormessage = e.getMessage();
+        }
+      return pg;
+    }
+}
+=======================================
+<apex:page Controller="ContactClassForVF" >
+    <apex:form >
+    <apex:pageBlock title="Contact" tabstyle="Contact">
+        <apex:pageBlockSection title="Enter Contact Details">
+          <apex:inputText label="Name" value="{!contactname}"/> 
+          <apex:inputText label="Email" value="{!contactEmail}"/>
+        </apex:pageBlockSection>
+        Record Created{!contactid}
+        Errors:{!errormessage}
+        <apex:pageBlockButtons >
+         <apex:commandButton value="Save" action="{!Save1}"/>
+        </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>
+
+=======================================
+@isTest
+public class TestClassForVF {
+    static testmethod  void testthecode(){
+        Test.startTest();
+        ContactClassforVF ccvf = new ContactClassforVF();
+        ccvf.contactname = 'Steve';
+        ccvf.contactemail = 'Steve@hotmail.com';
+        ccvf.save1();
+        Test.startTest();
+    }
+}
+==================================
+public with sharing class ContactClassForVF {
+    public string contactname {get;set;}
+    public string contactemail{get;set;}
+    public Contact con{get;set;}
+    public string contactid{get;set;}
+    public string errormessage{get;set;}
+   // public pagereference pg{get;set;}
+    public List<contact>reclist{get;set;}
+    
+   // public pagereference Save1()
+      public void save1()
+     { errormessage='No errors so far';
+        try{
+            con = new contact();
+            system.debug(contactname);
+            con.LastName =contactname;
+            con.email = contactemail;
+            insert con;
+            contactid = con.id;
+           // pg= new pagereference('/'+con.id);
+            //pg.setRedirect(true);
+            getlist();
+        }catch(exception e){
+            errormessage = e.getMessage();
+        }
+      //return pg;
+    }
+    public void  getlist(){
+        reclist = new List<Contact>();
+        reclist =[select id,Name,Email from contact where createddate = today];
+    }
+}
+
+=================================================
+<apex:page Controller="ContactClassForVF" >
+    <apex:form >
+    <apex:pageBlock title="Contact" tabstyle="Contact">
+        <apex:pageBlockSection title="Enter Contact Details">
+          <apex:inputText label="Name" value="{!contactname}"/> 
+          <apex:inputText label="Email" value="{!contactEmail}"/>
+        </apex:pageBlockSection>
+        Record Created{!contactid}
+        Errors:{!errormessage}
+        <apex:pageBlockButtons >
+         <apex:commandButton value="Save" action="{!Save1}"/>
+        </apex:pageBlockButtons>
+        </apex:pageBlock>
+        
+        
+   <apex:pageBlock title="Contacts created Today" tabstyle="Contact" >
+   <apex:pageBlockTable value="{!reclist}" var="tablevar">
+   <apex:column value="{!tablevar.Name}"/>
+   <apex:column value="{!tablevar.Email}"/>
+  </apex:pageBlockTable>
+   </apex:pageBlock>
+ </apex:form>
+</apex:page>
+
+=============================================Component
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="Amount" type="double" default="5000"/>
+    <aura:attribute name="RateOfInterest" type="double" default="8"/>
+    <aura:attribute name="Maturityamount" type="double" default="0"/> 
+    <ui:inputNumber label="Coupon amount" value="{!v.Amount}"/>
+    <ui:inputNumber label="Coupon amount" value="{!v.RateOfInterest}"/>
+    Maturity Value:<ui:outputNumber value="{!v.Maturityamount}"/>
+    <lightning:button variant="brand" label="Calculate" onclick="{!c.Calculate}"/>
+    
+</aura:component>
+
+===============================================controller
+({
+	Calculate : function(component, event, helper) {
+        var amt= component.get("v.Amount");
+        var roi= component.get("v.RateOfInterest");
+        var finalamt= roi/100*amt + amt;
+        component.set("v.Maturityamount",finalamt);
+	}
+})
+
+===========================================Application
+<aura:application >
+    <c:ITCComp1/>//component file name
+</aura:application>
+
+===========================================================ContactCntroller
+({
+  
+     doInit: function(component, event, helper) {
+       if(comonent.get("v.recordId")!='' || component.get("v.recordId")!=null){
+        
+        var action = component.get("c.fetchcontact");
+       action.setParams({Idd : component.get("v.recordId") });
+       
+       action.setCallback(this,function(a){
+                          component.set{"v.conObj",a.getReturnvalue()};
+                          component.set{"v.conObj.LastName",a.getReturnvalue().LastName}; 
+                          });
+   }
+},
+    
+    savedata: function(component, event, helper) {
+        
+        var name = component.get("v.conObj.LastName");
+        var email = component.get("v.conObj.Email");
+        var desc = component.get("v.conObj.Description");
+        var redirectid = '';
+        
+        if(component.get("v.recordId")=='' || component.get("v.recordId")==null){        
+            
+            var action = component.get("c.insertrecords");
+            action.setParams({Name1 : name,Email : email });            
+        }else{
+            
+            var action = component.get("c.updaterecords");
+            action.setParams({recid: component.get("v.recordId"),passeddata: desc });
+            
+        }    
+        
+        action.setCallback(this,function(a){
+            console.log(a.getReturnValue());
+            if(component.get("v.recordId")=='' || component.get("v.recordId")==null){
+                redirectid = a.getReturnValue();
+            } else{
+                redirectid = component.get("v.recordId")
+            }
+            var event = $A.get('e.force:navigateToSObject');
+            event.setParams({
+                
+                "recordId":  redirectid,                 
+                "slideDevName": "details"
+                
+            }); 
+            event.fire();  
+            
+            
+            
+            
+        } );
+        $A.enqueueAction(action);
+    },
+    close1:function(component){
+        
+        component.set("v.truthy","false");
+        
+    }
+})
+
+=========================================
+public class HttpCalloutjson {
+  public static HttpResponse makeGetCallout() {
+        Http http = new Http();
+        HttpRequest request = new HttpRequest();
+        request.setEndpoint('https://th-apex-http-callout.herokuapp.com/animals');
+        request.setMethod('GET');
+        HttpResponse response = http.send(request);
+        // If the request is successful, parse the JSON response.
+        if (response.getStatusCode() == 200) {
+            // Deserializes the JSON string into collections of primitive data types.
+            system.debug(response.getBody());
+            Map<String, Object> results = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
+            system.debug(results);
+            // Cast the values in the 'animals' key as a list
+            List<Object> animals = (List<Object>) results.get('animals');
+            System.debug('Received the following animals:');
+            for (Object animal: animals) {
+                System.debug(animal);
+            }
+        }
+        return response;
+    }
+    public static HttpResponse makePostCallout() {
+       
+ Http http = new Http();
+        HttpRequest request = new HttpRequest();
+        request.setEndpoint('https://th-apex-http-callout.herokuapp.com/animals');
+        request.setMethod('POST');
+        request.setHeader('Content-Type', 'application/json;charset=UTF-8');
+        request.setBody('{"name":"mighty moose"}');
+        HttpResponse response = http.send(request);
+        // Parse the JSON response
+        if (response.getStatusCode() != 201) {
+            System.debug('The status code returned was not expected: ' +
+                response.getStatusCode() + ' ' + response.getStatus());
+        } else {
+            System.debug(response.getBody());
+        }
+        return response;
+    }
+}
+
+
+HttpCalloutjson.makeGetCallout();
+HttpCalloutjson.makePostCallout();
+=====================
+/services/apexrest/GetCase2/5000o00002MArdaAAD
+
+=========================RestCaseCreator
+@RestResource(urlMapping='/GetCase2/*')
+global with sharing class RestCaseCreatorurl {
+    static Contact cont;
+       @httpGet
+    global static Case grtCaseById(){
+        RestRequest request = RestContext.request;
+        String caseId = request.requestURI.substring(request.requestURI.LastIndexof('/')+1);
+        Case result = [SELECT CaseNumber,Subject,Status,Origin,Priority FROM Case WHERE Id = :caseId];
+        return result;
+    }
+    @httpPost global static String insertrecords(String Name1,String Email,String Description){
+        try{
+            cont = new Contact();
+           // cont.LastName = 'Kholi';
+            cont.LastName = Name1;
+            cont.Email = Email;
+            cont.Description =Description;
+            insert cont;
+            system.debug(cont.id);
+        }catch(exception e){
+            system.debug(e.getMessage());
+            return e.getmessage();
+        }  
+            return cont.id;
+    }
+}
+
+=====================WorkBench
+/services/apexrest/GetCase2
+{"Name1" :"ITCrestContact1","Email" :"ITC@ITC.com"} ----In Request body
+
