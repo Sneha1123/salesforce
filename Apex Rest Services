@@ -1,0 +1,71 @@
+R E -> Representational
+S -> State
+T -> Transfer
+External Application <---> SF
+Transfer data in JSON or XML format
+Not a protocol but a framework
+Stateless
+Its HTTP based and client-server
+HTTP based means it follows standard HTTP methods like (HTTP methods are mapped to CRUD op.):
+  Get -> read
+  PUT/PATCH -> update
+  POST-> create
+  Remove -> delete
+Receives response payload and status
+
+***************************************************************************************
+REST v/s SOAP
+****************************************************************************************
+Rest uses standard HTTP which is much simpler
+REST permits both JSON and XML whereas SOAP only permits XML
+REST allows better support for browser due to its support for JSON
+REST has better performance and scalibility
+REST reads can be cached, SOAP based reads cant be cached.
+  
+***************************************************************************************
+Communicating with external system through SF using REST
+**************************************************************************************
+Connect through HTTP request and if any authentication is required then SF also provides an OAuth Authentication.
+
+**************************************************************************************
+Why use REST?
+**************************************************************************************
+All sObjects including standard and custom come with REST API
+useful for custom interactions
+Good for complex interaction in a single cell like:
+  Inserting/updating multiple objects
+  Calling external system
+  Custom search intefaces can be done.
+  
+**************************************************************************************
+JSON & XML formats
+*************************************************************************************
+JSON:
+  {"Structure Name":[{"key":"value","key":"value"},{"key":"value","key":"value"}]}
+  
+  eg:
+    {"employee":[{"name":"A","id":"1"},
+      {"name":"B","id":"2"},
+      {"name":"C","id":"3"}
+    ]}
+    
+XML:
+User defined Tags are used 
+Employees here work as the structure name and employee gives info of each employee
+
+  eg:
+      <employees>
+        <employee>
+          <name>A</name>
+          <id>1</id>
+        </employee>
+        <employee>
+          <name>B</name>
+          <id>2</id>
+        </employee>
+        <employee>
+          <name>C</name>
+          <id>3</id>
+        </employee>
+        
+      </employees>
