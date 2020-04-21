@@ -69,3 +69,62 @@ Employees here work as the structure name and employee gives info of each employ
         </employee>
         
       </employees>
+
+**************************************************************************************
+Create a REST Resource
+**************************************************************************************
+
+--------------- READ/GET -> To get the cases associated with a particular account --------------
+//@RestResource used at class level and enables you to expose an apex class as a REST resource
+@RestResource(urlMapping='/CaseField/*') //CaseField id the url mapping we provide which is used in workbench -> /services/apexrest/CaseField?companyName=Edge+Communications
+global with sharing class RESTCaseController {
+   @HttpGet //as its a get request
+    global static List<Case> getOpenCases(){
+        String CName = RestContext.request.params.get('companyName');
+        Account Acc = [select id, name from Account where name=:CName];
+        List<Case> cc = [select id,status, Owner.Name from Case where Accountid=:Acc.Id];
+        return cc;
+    }
+}
+
+-------------------------------DELETE----------------------------------------------
+//@HttpDelete annotation is to delete something in SF from outside of SF.
+Using the same resource "CaseField" here
+
+    @HttpDelete
+    global static String deleteClosedCases(){
+        String CName = RestContext.request.params.get('companyName');
+        Account Acc = [select id, name from Account where name=:CName];
+        List<Case> cc = [select id,status, Owner.Name from Case where Accountid=:Acc.Id and status ='Closed'];
+        delete cc;
+        return 'Closed Cases deleted';
+    }
+
+---------------------------------POST/CREATE----------------------------------------
+ @HttpPost
+    global static String CreateAccount(String AccName, String AccDesc){
+	Account a = new Account();
+        a.Name= AccName;
+        a.Description = AccDesc;
+        insert a;
+        return 'account Created';
+	        
+    }
+    
+    
+    
+    // in Workbench - {"AccName":"TestRest","AccDesc":"Inserted via Rest"}
+    
+----------------------------PATCH/UPDATE----------------------------------------------
+
+@HttpPatch
+    global static String UpdateCases(String CaseId, String CaseStatus, String CaseNotes ){
+        Case cc = [select Id, status, description from Case where Id=:CaseId ];
+        cc.status = CaseStatus;
+        cc.description += CaseNotes; //to add to the existing description rather than replacing
+        update cc;
+        return 'Case Updated';
+    }
+
+
+// in Workbench - {"CaseId":"5002v00002jt5wV","CaseStatus":"Working","CaseNotes":"Line2 added via Rest"}
