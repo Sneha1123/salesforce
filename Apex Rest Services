@@ -381,4 +381,33 @@ global with sharing class RestComplexController4 {
     }
 }
 
+# this code takes only one account ie only one account can be added at one time.
+in order to add a list of accounts, account list should be passed.
 
+
+@HttpPost
+    global static AccountWrapper createAccounts(List<Account> Acct){
+    
+    try{
+            insert Acct;
+            AcWr.Acc=Acct;
+            AcWr.status='Success';
+            AcWr.message='New Account Created';
+        }
+    }
+
+//in Workbench - 
+ { "acct" : 
+     [{
+       "Name" : "Test Account 2",
+       "AccountNumber" : "888",
+       "Website" : "tutorialRack.com",
+       "BillingCity" : "San Francisco"
+      },
+      {
+       "Name" : "Test Account 3",
+       "AccountNumber" : "788",
+       "BillingState" : "CA",
+       "Active__c" : "true"
+      }]
+   }
