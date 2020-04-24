@@ -322,3 +322,25 @@ global with sharing class RestComplexController3 {
         }
     }
 }
+
+
+-------------------------------------Version 3 with POST method--------------------------
+@HttpPost
+    global static AccountWrapper createAccounts(String AccName, String AccDescription){
+        RestRequest req = RestContext.request;
+        RestResponse res = RestContext.response;
+        AccountWrapper AcWr = new AccountWrapper();
+        Account newAccount = new Account();
+        newAccount.Name = AccName;
+        newAccount.Description = AccDescription; 
+        insert newAccount;
+        
+        AcWr.Acc.add(newAccount);
+        Acwr.Status='Success';
+        AcWr.Message='Account created';
+        return AcWr;
+    }
+
+
+
+
