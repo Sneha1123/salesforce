@@ -128,3 +128,197 @@ Using the same resource "CaseField" here
 
 
 // in Workbench - {"CaseId":"5002v00002jt5wV","CaseStatus":"Working","CaseNotes":"Line2 added via Rest"}
+
+
+
+****************************************************************************************
+Complex REST API calls
+****************************************************************************************
+RestContext has two objects:
+	Request - To send request to the Rest resource -> basically comes to the resource
+	Response - To send response from the Rest Resource to the client.
+
+
+@RestResource(urlMapping='/v1/ComplexAcc/*')
+global with sharing class RestComplexController {
+
+    @HttpGet
+    global static Account GetAcc(){
+        RestRequest req = RestContext.request;
+        RestResponse res = RestContext.response;
+        String ac = req.requestURI.substring(req.requestURI.lastIndexOf('/')+1);
+        system.debug(ac);
+        system.debug(req.requestURI.lastIndexOf('/')); // gives the position of last '/' and adding 1 to it gives the starting point of the substring
+        Account acc = [select Id, Name from Account where Id=:ac];
+        return acc;
+        
+    }
+}
+
+--------------------------------Version 2 of above resource-----------------------------------------------------
+Resource code - https://github.com/deepikakhanna/SalesforceREST/blob/dkhannaRESTful/AccountRESTService_V3
+Makes the rsponse more user friendly and instead of apex error gives error defined by us.
+create a wrapper class with variables which can be replaced depending on the fact that the particular value exists or not.
+
+
+
+@RestResource(urlMapping = '/v2/ComplexAcc/*')
+global with sharing class RestComplexController2 {
+
+        @HttpGet
+    global static AccountWrapper GetAcc(){
+        RestRequest req = RestContext.request;
+        RestResponse res = RestContext.response;
+        AccountWrapper AcWr = new AccountWrapper();
+        String accountId = req.requestURI.substring(req.requestURI.lastIndexOf('/')+1);
+        system.debug(accountId);
+        List<Account> acc = [select Id, Name from Account where Id=:accountId];
+        
+    
+    
+    if(acc!= null && acc.size()>0){
+        system.debug(acc+' if block');
+       AcWr.Ac1 = acc[0];
+        AcWr.status = 'Success';
+        AcWr.Message = 'Account Found';
+        
+    }
+    else{
+        AcWr.Ac1 = null;
+        system.debug(acc+' else block');
+        AcWr.status = 'Error';
+        AcWr.Message = 'Account not Found';
+        res.statusCode = 404;
+    }
+    return AcWr;
+    }
+    global class AccountWrapper{
+        public Account Ac1;
+        public String status;
+        public String Message;
+        
+        public AccountWrapper(){}
+    }
+}
+
+------------------------------Version 3 of above resource------------------------------
+Case 1- user knows the id ->/services/apexrest/v3/ComplexAcc/0012v00002z1wVU
+Case 2 - User knows a part of the name starting with -> /services/apexrest/v3/ComplexAcc/accounts?Name=Ac
+
+first check what is present after '/'
+	case 1- search string
+	case 2- id
+		If case-1 then check whether its empty/null or not
+			case 3- empty/null then give error message
+			case 4- value present 
+				if case 4- then check whether the value is present or not
+					case 5- value found 
+					case 6- value not found
+		If case 2- then check whether its empty/null or not
+			case 7- empty/null then give error message
+			case 8- value present
+				if case 8- then check whether the value is present or not
+					case 9- value found
+					case 10- value not found
+					
+					
+				
+			
+@RestResource (urlMapping='/v3/ComplexAcc/*')
+global with sharing class RestComplexController3 {
+
+    @HttpGet
+    global static AccountWrapper getAccounts(){
+        RestRequest req = RestContext.request;
+        RestResponse res = RestContext.response;
+        AccountWrapper AcWr = new AccountWrapper();
+        String AccountId = req.requestURI.substring(req.requestURI.lastIndexOf('/')+1);
+    	system.debug(AccountId);
+        if(doSearch(AccountId)){
+            system.debug('Do search was true'+AcWr);
+            searchAccounts(req, res, AcWr);
+            
+        }
+        else{
+             system.debug('Do search was false'+AcWr);
+            findAccount(res,AcWr, AccountId);
+        }
+        
+        return Acwr;
+    
+        
+    }
+    
+    private static boolean doSearch(String AccountId){
+        if(AccountId == 'accounts'){
+            system.debug('in dosearch if'+AccountId);
+            return true;
+        }
+        else{
+            system.debug('in dosearch else'+AccountId);
+            return false;
+        }
+    }
+    
+    private static void searchAccounts(RestRequest req, RestResponse res, AccountWrapper AcWr){
+    String searchTerm = req.params.get('Name');
+        system.debug(searchTerm);
+        system.debug('in searchAccounts after dosearch'+ searchTerm);
+        if(searchTerm == null || searchTerm == '' ){
+            system.debug('in if of dosearch where search term is null');
+            //if value is empty or null
+            AcWr.Status='Error';
+            AcWr.Message='Please enter a value';
+            res.statusCode = 400;
+        }
+        else{
+             system.debug('in if of dosearch where search term is not null');
+            //value entered
+            String searchText = '%'+searchTerm+'%';
+            system.debug(searchText);
+            List<Account> AccList = [select Id, Name from Account where Name like:searchText];
+            system.debug(AccList);
+            if(AccList != null && AccList.size()>0){
+                //if value is present in SF
+                AcWr.Acc = AccList;
+                AcWr.Status = 'Success';
+                AcWr.Message = AccList.size()+'Accounts Found';
+            }
+            else{
+                //no such accounts found
+                AcWr.Status = 'Error';
+                AcWr.Message = 'No such accounts found';
+            }
+        }
+    }
+    private static void findAccount(RestResponse res, AccountWrapper AcWr, String AccountId ){
+        if(AccountId !=null|| AccountId !=''){
+            List<Account> accountViaId = [select Id, Name from Account where Id=:AccountId ];
+            if(accountViaId != null && accountViaId.size()>0){
+                AcWr.Acc = accountViaId;
+                 AcWr.Status = 'Success';
+                 AcWr.Message = 'Found via id';
+            }
+            else{
+            AcWr.Status = 'Error';
+            AcWr.Message = 'Not Found';
+            res.statusCode =404;
+        }
+        }
+        else{
+            AcWr.Status = 'Error';
+            AcWr.Message = 'Please specify an ID';
+        }
+        
+    }
+    
+    global class AccountWrapper{
+        Public List<Account> Acc;
+        Public String Status;
+        Public String Message;
+        
+        public AccountWrapper(){
+            Acc = new List<Account>();
+        }
+    }
+}
