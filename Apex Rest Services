@@ -341,6 +341,44 @@ global with sharing class RestComplexController3 {
         return AcWr;
     }
 
+------------------------------Version 4 for sending object directly instead of fields------
+@RestResource(urlMapping='/v4/ComplexAcc/*')
+global with sharing class RestComplexController4 {
 
+    @HttpPost
+    global static AccountWrapper createAccounts(Account Acct){
+        RestRequest req = RestContext.request;
+        RestResponse res = RestContext.response;
+        AccountWrapper AcWr = new AccountWrapper();
+        
+        
+        try{
+            insert Acct;
+            AcWr.Acc.add(Acct);
+            AcWr.status='Success';
+            AcWr.message='New Account Created';
+        }
+        catch(Exception e){
+            res.statusCode = 500;
+            AcWr.Acc = null;
+            AcWr.status = 'Error';
+            AcWr.message = 'Your request failed with the following error:'+e.getMessage();
+            
+        }
+        
+        return AcWr;
+        
+    }
+    
+    global class AccountWrapper{
+       public List<Account>Acc;
+       public String status;
+       public String message;
+        
+        public AccountWrapper(){
+            Acc=new List<Account>();
+        }
+    }
+}
 
 
