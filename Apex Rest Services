@@ -411,3 +411,80 @@ in order to add a list of accounts, account list should be passed.
        "Active__c" : "true"
       }]
    }
+
+
+------------------------------Version 5 - associating contacts with accounts----------
+Workbench - 
+{
+  "reqst" :
+  {
+    "acc" : 
+    { 
+      "Name" : "Salesforce.com",
+      "AccountNumber" : "1001",
+      "Website" : "www.salesforce.com"
+    },
+    "con" :
+    [
+      {"FirstName" : "Test", "LastName" : "O'Riley", "Email" : "testcontact1@salesforce.com"},
+      {"FirstName" : "Test", "LastName" : "Contact2", "Email" : "testcontact2@salesforce.com"},
+      {"FirstName" : "Test", "LastName" : "Contact3", "Email" : "testcontact3@salesforce.com"}
+    ]
+  }
+}
+
+
+
+Code - 
+
+@RestResource(urlMapping='/v5/ComplexAcc/*')
+global with sharing class RestComplexController5 {
+
+    @HttpPost
+    global static void doPost(RequestWrapper reqst){
+        RestRequest req = RestContext.request;
+        RestResponse res = RestContext.response;
+        AccountWrapper AcWr = new AccountWrapper();
+        
+        try{
+           insert reqst.acc;
+            AcWr.acc = reqst.acc;
+            
+            for(Contact c:reqst.con){
+                
+                c.AccountId = reqst.acc.Id;
+            }
+            insert reqst.con;
+            AcWr.con = reqst.con;
+             AcWr.status = 'Success';
+            AcWr.message = 'Accounts and corresponding contacts added';
+        }
+        catch(Exception e){
+             res.statusCode = 500;
+            AcWr.acc = null;
+            AcWr.con = null;
+            AcWr.status = 'Error';
+            AcWr.message = 'Your request failed with the following error:'+e.getMessage();
+        }
+        
+    }
+    
+    global class RequestWrapper{
+         Account acc;
+         List<Contact> con;
+    }
+    
+    global class AccountWrapper{
+        Account acc;
+        String status;
+       String message;
+       List<Contact> con;
+        
+        public AccountWrapper(){
+            con= new List<Contact>();
+        }
+    } 
+}
+
+
+
