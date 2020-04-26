@@ -1,0 +1,54 @@
+Object Book__c
+Objective: As new book is inserted the price gets a discount of 10 percent.
+
+Code for discount written in apex class, used in trigger and both tested using a test class
+
+-----------------------------Apex Class--------------------------------------------------
+public class BookApex{
+
+    public static void applyDiscount(List<Book__c> getBooks){
+        for(Book__c b:getBooks){
+            b.Price__c = b.Price__c * 0.9;
+        }
+    
+    }
+
+}
+
+----------------------------Apex Trigger------------------------------------------------
+
+trigger BookApexTrigger on Book__c (before insert) {
+    List<Book__c> getBooks=trigger.new;
+    BookApex.applyDiscount(getBooks);
+
+}
+
+--------------------------------Test Class-----------------------------------------------
+@isTest
+private class BookApexTest{
+    static testMethod void PositiveTestApplyDiscount(){
+        Book__c GetBook = new Book__c();
+        GetBook.Name = 'Salesforce';
+        GetBook.Price__c = 100;
+        system.debug('Before insertion'+GetBook.Price__c);
+        
+        insert GetBook;
+        GetBook = [select Price__c from Book__c where Id=:GetBook.Id];
+        system.debug('After insertion'+GetBook);
+        system.assertEquals(90,GetBook.Price__c);
+        
+    }
+    
+    static testMethod void NegetiveTestApplyDiscount(){
+        Book__c GetBook = new Book__c();
+        GetBook.Name = 'Salesforce1';
+        GetBook.Price__c = 100;
+        system.debug('Before insertion'+GetBook.Price__c);
+        
+        insert GetBook;
+        GetBook = [select Price__c from Book__c where Id=:GetBook.Id];
+        system.debug('After insertion'+GetBook);
+        system.assertEquals(80,GetBook.Price__c);
+        
+    }
+}
