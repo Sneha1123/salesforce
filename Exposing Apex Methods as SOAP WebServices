@@ -16,3 +16,42 @@ Rules to be followed:
     
   3. If inner class is global then outer class should be global
   //consider webservice as access specifier withh accessibilty more than global 
+  
+  
+  
+ Code:
+ ---------------------------------------------------Apex Class----------------------------------------------------------------------------
+ 
+ global class SoapTest{
+    global class SpecialAccounts{
+    
+        webservice String AcctName;
+        webservice String AcctNumber; 
+    }
+    
+    webservice static Account createAccounts(SpecialAccounts splAcc){
+    Account acc = new Account();
+    acc.Name = splAcc.AcctName;
+    acc.AccountNumber = splAcc.AcctNumber;
+    
+    insert acc;
+    return acc;
+    
+    }
+}
+
+
+-------------------------------------------------------Test Class-----------------------------------------------------------------------
+
+@isTest
+private class SoapTestTest{
+    static testMethod void TestCreateAccounts(){
+        SoapTest.SpecialAccounts splAcc = new SoapTest.SpecialAccounts();
+        splAcc.AcctName = 'SoapTest1';
+        splAcc.AcctNumber = '12345';
+        Account acct = SoapTest.createAccounts(splAcc);
+        
+        system.assert(acct!=null);
+        
+    }
+}
