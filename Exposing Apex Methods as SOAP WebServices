@@ -1,0 +1,18 @@
+SOAP - Simple Object Access Protocol
+
+Apex Methods can be exposed to External systems as SOAP webservices.
+Apex uses Apex Callouts for interacting with external application.
+Apex callouts allows apex to invoke external systems through HTTP.
+
+Rules to be followed:
+  1. Webservice keyword cannot be used with
+    Class
+    Interface
+    Triggers
+    
+  2. Webservice keyword should be used when exposing
+    Methods - static should be used
+    Variables
+    
+  3. If inner class is global then outer class should be global
+  //consider webservice as access specifier withh accessibilty more than global 
